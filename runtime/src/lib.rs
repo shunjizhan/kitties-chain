@@ -36,6 +36,7 @@ pub use frame_support::{
 		IdentityFee, Weight,
 	},
 	StorageValue,
+	PalletId,
 };
 pub use frame_system::Call as SystemCall;
 pub use pallet_balances::Call as BalancesCall;
@@ -271,9 +272,18 @@ impl pallet_template::Config for Runtime {
 }
 
 impl pallet_insecure_randomness_collective_flip::Config for Runtime {}
+
+parameter_types! {
+	pub KittyPalletId: PalletId = PalletId(*b"py/kitty");
+	pub KittyPrice: Balance = EXISTENTIAL_DEPOSIT * 10;
+}
+
 impl pallet_kitties::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Randomness = RandomnessModule;
+	type Currency = Balances;
+	type KittyPrice = KittyPrice;		// use pre-defined KittyPrice from parameter_types!
+	type PalletId = KittyPalletId;	// use pre-defined KittyPalletId from parameter_types!
 }
 
 
